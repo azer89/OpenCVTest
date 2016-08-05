@@ -85,12 +85,14 @@
     <ClInclude Include="AVector.h" />
     <ClInclude Include="OpenCVWrapper.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemParams.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenCVWrapper.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="SystemParams.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
