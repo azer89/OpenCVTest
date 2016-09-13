@@ -9,6 +9,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	// ---------- wrapper ----------
 	OpenCVWrapper cvWrapper;
 
 	cvWrapper.CreateImage("hello_world", 500, 500, BGR_255);
@@ -25,8 +26,27 @@ int _tmain(int argc, _TCHAR* argv[])
 		polyline.push_back(AVector(x, y));
 	}
 
-	cvWrapper.DrawPoly("hello_world", polyline, MyColor(255), true, 3);
+	//cvWrapper.DrawPoly("hello_world", polyline, MyColor(255), true, 3);
+	//cvWrapper.ShowImage("hello_world");
+
+	// ---------- demonstrating polygon filling with an integer image ----------	
+	CVImg bwImg;
+	bwImg.CreateIntegerImage(500);
+	cvWrapper.DrawFilledPolyInt(bwImg, polyline, 1);
+
+	for (int x = 0; x < 500; x++)
+	{
+		for (int y = 0; y < 500; y++)
+		{
+			if (bwImg.GetIntegerValue(x, y) != 0)
+				{ cvWrapper.DrawCircle("hello_world", AVector(x, y), MyColor(255), 1); }
+			else
+				{ cvWrapper.DrawCircle("hello_world", AVector(x, y), MyColor(255, 0, 0), 1); }
+		}
+	}
+
 	cvWrapper.ShowImage("hello_world");
+
 	cvWrapper.WaitKey();
 
 	return 0;

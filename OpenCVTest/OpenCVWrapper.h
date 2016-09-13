@@ -297,6 +297,15 @@ public:
 		float xOffset = 0,
 		float yOffset = 0);
 
+	// drawing
+	template <typename T>
+	void DrawFilledPolyInt(CVImg& img,
+		                   std::vector<T> shape_contours,
+						   int val,
+		                   float scale = 1.0f,
+		                   float xOffset = 0,
+		                   float yOffset = 0);
+
 	// get longest contour
 	template <typename T>
 	int GetLongestContourIndex(std::vector<std::vector<T>> contours);
