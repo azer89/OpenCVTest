@@ -1,51 +1,56 @@
 
-/*
-================================================================================
+/*================================================================================
 Reza Adhitya Saputra
 radhitya@uwaterloo.ca
-================================================================================
-*/
+================================================================================*/
 
 #ifndef OPENCV_WRAPPER
 #define OPENCV_WRAPPER
 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-//#include "ImageThinning.h"
 
 #include <unordered_map>
 
+#include "ImageThinning.h"
+#include "SystemParams.h"
 #include "AVector.h"
 
-#define BGR_255 CV_8UC3		// blue red green
-#define FLOAT_IMG CV_32FC1	// floating point
 
-/*
-================================================================================
-================================================================================
-*/
+#define BGR_255 CV_8UC3
+
+/*================================================================================
+================================================================================*/
 struct MyColor
 {
 public:
-	int _r; int _g; int _b;
+	int _r;
+	int _g;
+	int _b;
 
 	MyColor(int r, int g, int b)
 	{
-		this->_r = r; this->_g = g; this->_b = b;
+		this->_r = r;
+		this->_g = g;
+		this->_b = b;
 	}
 
 	MyColor(int val)
 	{
-		this->_r = val; this->_g = val; this->_b = val;
+		this->_r = val;
+		this->_g = val;
+		this->_b = val;
+	}
+
+	bool IsNotBlack()
+	{
+		return (this->_r > 0 && this->_g && this->_b);
 	}
 };
 
-
-/*
-================================================================================
+/*================================================================================
 wrapper for cv::Mat
-================================================================================
-*/
+================================================================================*/
 struct CVImg
 {
 public:
@@ -85,14 +90,14 @@ public:
 	}
 
 	// ===== create =====
-	void CreateGrayscaleImage(int height, int width) { _img = cv::Mat::zeros(height, width, CV_8UC1);  _isColor = true; }
-	void CreateGrayscaleImage(int squareSize)		 { _img = cv::Mat::zeros(squareSize, squareSize, CV_8UC1);  _isColor = true; }
-	void CreateColorImage(int height, int width)     { _img = cv::Mat::zeros(height, width, CV_8UC3);  _isColor = true; }
-	void CreateColorImage(int squareSize)		     { _img = cv::Mat::zeros(squareSize, squareSize, CV_8UC3);  _isColor = true; }
-	void CreateFloatImage(int height, int width)     { _img = cv::Mat::zeros(height, width, CV_32FC1); _isColor = false; }
+	void CreateGrayscaleImage(int height, int width) { _img = cv::Mat::zeros(height,     width,      CV_8UC1);  _isColor = true;  }
+	void CreateGrayscaleImage(int squareSize)		 { _img = cv::Mat::zeros(squareSize, squareSize, CV_8UC1);  _isColor = true;  }
+	void CreateColorImage(int height, int width)     { _img = cv::Mat::zeros(height,     width,      CV_8UC3);  _isColor = true;  }
+	void CreateColorImage(int squareSize)		     { _img = cv::Mat::zeros(squareSize, squareSize, CV_8UC3);  _isColor = true;  }
+	void CreateFloatImage(int height, int width)     { _img = cv::Mat::zeros(height,     width,      CV_32FC1); _isColor = false; }
 	void CreateFloatImage(int squareSize)		     { _img = cv::Mat::zeros(squareSize, squareSize, CV_32FC1); _isColor = false; }
-	void CreateIntegerImage(int height, int width)   { _img = cv::Mat::zeros(height, width, CV_32SC1); _isColor = false; }
-	void CreateIntegerImage(int squareSize)		     { _img = cv::Mat::zeros(squareSize, squareSize, CV_32SC1); _isColor = false; } // signed integer
+	void CreateIntegerImage(int height, int width)   { _img = cv::Mat::zeros(height,     width,      CV_32SC1); _isColor = false; }
+	void CreateIntegerImage(int squareSize)		     { _img = cv::Mat::zeros(squareSize, squareSize, CV_32SC1); _isColor = false; }
 
 	// ===== set =====
 	void SetFloatPixel(int x, int y, float val)  { _img.at<float>(y, x) = val; }
@@ -135,9 +140,9 @@ public:
 		// drawing
 		cv::Mat drawing = cv::Mat::zeros(_img.size(), CV_8UC3);
 
-		for (int j = 0; j < drawing.rows; j++)
+		for (int j = 0; j < drawing.rows; j++) // y
 		{
-			for (int i = 0; i < drawing.cols; i++)
+			for (int i = 0; i < drawing.cols; i++) // x
 			{
 				if (_img.at<float>(j, i) < 0)
 				{
@@ -155,167 +160,173 @@ public:
 				}
 			}
 		}
-
 		// save image
 		imwrite(filename, drawing);
+	}	
+
+	CVImg Thinning()
+	{
+		CVImg thinningImg;
+		thinningImg.CreateGrayscaleImage(this->GetCols(), this->GetRows());
+		ImageThinning::ZhanSuenThinning(this->_img, thinningImg._img);
+		return thinningImg;
 	}
 };
 
-
-/*
-================================================================================
-================================================================================
-*/
+/*================================================================================
+OpenCV Rendering
+================================================================================*/
 class OpenCVWrapper
 {
 public:
+	// ----------  random ----------
 	cv::RNG _rng;
-	std::unordered_map <std::string, cv::Mat> _images;
 
 public:
-	// constructor	
+	// ----------  hash table ----------
+	std::unordered_map <std::string, cv::Mat> _images;
+
+	// ---------- constructor ----------
 	OpenCVWrapper();
 
-	// destructor
+	// ---------- destructor ----------
 	~OpenCVWrapper();
 
-	// signed distance
-	//template <typename T>
-	CVImg CalculateSignedDistance(std::vector<AVector> contour);
-	CVImg CalculateSignedDistance(std::vector<AVector> contour, CVImg aMask);
-	float GetSignedDistance(std::vector<cv::Point> contour, int x, int y);
-
-	// signed distance
-	//template <typename T>
-	CVImg CalculateSignedDistance(std::vector<std::vector<AVector>> contour);
-
-	// Get contour
-	std::vector<AVector> GetContour(CVImg img)
-	{
-		std::vector<std::vector<cv::Point> > contours;
-		std::vector<cv::Vec4i> hierarchy;
-		findContours(img.GetCVImage(), contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-		int longestIdx = GetLongestContourIndex(contours);
-		return ConvertCVPointToAVector(contours[longestIdx]);
-	}
-
-	void SetWhite(std::string imageName)
-	{
-		cv::Mat img = _images[imageName];
-		img = cv::Scalar(255, 255, 255);
-	}
-
-	// image
-	void CreateImage(std::string imageName, int width, int height, int imgType);
-
-	// image
-	void ShowImage(std::string imageName);
-
-	// image
-	void SaveImage(std::string imageName, std::string filePath);
-
-	// image
-	void SetPixel(std::string imageName, int x, int y, MyColor col);
-
-	// image
-	int GetNumColumns(std::string imageName);
-
-	// image
-	int GetNumRows(std::string imageName);
-
-	// convert (make this a template)
-	std::vector<cv::Point2f>			ConvertAVectorToCvPoint2f(std::vector<AVector> contour);
-	std::vector<cv::Point>				ConvertAVectorToCvPoint(std::vector<AVector> contour);
-	std::vector<AVector>				ConvertCVPointToAVector(std::vector<cv::Point> contour);
-	std::vector<AVector>				ConvertCVPointToAVector(std::vector<cv::Point2f> cvContour);
-	std::vector<std::vector<cv::Point>> ConvertVectorsToCvPoint(std::vector<std::vector<AVector>> contours);
-
-	// wait
-	void WaitKey();
-
-	// random color
+	// ---------- random ----------
 	MyColor GetRandomColor();
 
-	// drawing
+	// ---------- create a cv::Mat instance ----------
+	void CreateImage(std::string imageName, int width, int height, int imgType);
+
+	// ---------- show ----------
+	void ShowImage(  std::string imageName);
+
+	// ---------- save to an image file ----------
+	void SaveImage(  std::string imageName, std::string filePath);
+
+	// ---------- set color of a pixel ----------
+	void SetPixel(   std::string imageName, int x, int y, MyColor col);
+
+	// ---------- weight of an image ----------
+	int  GetNumColumns(std::string imageName);
+
+	// ---------- height of an image ----------
+	int  GetNumRows(   std::string imageName);
+	
+	// ---------- OpenCV waitKey ----------
+	void WaitKey();
+
+	// ---------- set all pixels white ----------
+	void SetWhite(std::string imageName);
+
+	// ---------- the all pixels black ----------
+	void SetBlack(std::string imageName);
+
+	// ---------- color to black/white ----------
+	CVImg ConvertToBW(std::string imageName);
+
+	// ---------- color of a pixel  ----------
+	MyColor GetColor(std::string imageName, int x, int y);
+
+	// ---------- Get contour ----------
+	std::vector<AVector> GetContour(CVImg img);
+
+	// ---------- Get contours ----------
+	std::vector<std::vector<AVector>> GetContours(CVImg img);
+
+	// ----------  point polygon test ----------
 	template <typename T>
-	void DrawLine(std::string imageName, T pt1, T pt2, MyColor color, int thickness, float scale = 1.0f);
+	float PointPolygonTest(std::vector<T> shape_contours, T pt);
 
-	// drawing
-	void PutText(std::string imageName, std::string text, AVector pos, MyColor col, float scale = 0.5f, float thickness = 1)
-	{
-		cv::Mat img = _images[imageName];
-		cv::putText(img, text, cv::Point(pos.x, pos.y), cv::FONT_HERSHEY_SIMPLEX, scale, cv::Scalar(col._b, col._g, col._r), thickness);
-	}
+	// ---------- signed distance ----------
+	CVImg CalculateSignedDistance(std::vector<AVector> contour);
 
-	// drawing
-	void DrawCircle(std::string imageName, AVector pt, MyColor col, float radius, float scale = 1.0f)
-	{
-		cv::Mat drawing = _images[imageName];
-		cv::circle(drawing, cv::Point(pt.x * scale, pt.y * scale), radius, cv::Scalar(col._b, col._g, col._r), -1);
-	}
+	// ---------- signed distance ----------
+	CVImg CalculateSignedDistance(std::vector<AVector> contour, CVImg aMask);
 
-	// get contour
-	// findContours(indexedMats[a], contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	// ---------- signed distance ----------
+	float GetSignedDistance(std::vector<cv::Point> contour, int x, int y);
 
-	// drawing
-	template <typename T>
-	void DrawPolyOnCVImage(cv::Mat img,
-		std::vector<T> shape_contours,
-		MyColor color,
-		bool isClosed,
-		float thickness = 1.0f,
-		float scale = 1.0f,
-		float xOffset = 0,
-		float yOffset = 0);
+	// ---------- signed distance ----------
+	float GetSignedDistance(std::vector<std::vector<cv::Point>> contours, int x, int y);
 
-	// drawing
-	template <typename T>
-	void DrawPoly(std::string imageName,
-		std::vector<T> shape_contours,
-		MyColor color,
-		bool isClosed,
-		float thickness = 1.0f,
-		float scale = 1.0f,
-		float xOffset = 0,
-		float yOffset = 0);
-
-	// drawing
-	template <typename T>
-	void DrawRetranslatedPoly(std::string imageName,
-		std::vector<T> shape_contours,
-		std::vector<T> medial_axis,
-		MyColor color,
-		float thickness = 1.0f,
-		float scale = 1.0f);
-
-	// drawing
-	template <typename T>
-	void DrawFilledPoly(std::string imageName,
-		std::vector<T> shape_contours,
-		MyColor color,
-		float scale = 1.0f,
-		float xOffset = 0,
-		float yOffset = 0);
-
-	// drawing
-	template <typename T>
-	void DrawFilledPolyInt(CVImg& img,
-		                   std::vector<T> shape_contours,
-						   int val,
-		                   float scale = 1.0f,
-		                   float xOffset = 0,
-		                   float yOffset = 0);
-
-	// get longest contour
+	// ---------- conves hull ----------
+	std::vector<AVector> GetConvexHull(std::vector<AVector> polygon);
+	
+	// ---------- get longest contour ----------
 	template <typename T>
 	int GetLongestContourIndex(std::vector<std::vector<T>> contours);
 
-private:
-	bool InsidePolygon(std::vector<AVector> boundary, AVector pt)
+	// ---------- text ----------
+	void PutText(std::string imageName, std::string text, AVector pos, MyColor col, float scale = 0.5f, float thickness = 1);
+
+	// ---------- conversion ----------
+	template <typename T, typename U>
+	std::vector<U> ConvertList(std::vector<T> contour1);
+
+	// ========== drawing ==========
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawLine(std::string imageName, T pt1, T pt2, MyColor color, int thickness, float scale = 1.0f);
+
+	// ---------- draw ----------
+	void DrawCircle(std::string imageName, AVector pt, MyColor col, float radius)
 	{
-		std::vector<cv::Point> cvBoundary = ConvertAVectorToCvPoint(boundary);
-		return (cv::pointPolygonTest(cvBoundary, cv::Point(pt.x, pt.y), false) > 0);
+		cv::Mat drawing = _images[imageName];
+		cv::circle(drawing, cv::Point(pt.x, pt.y), radius, cv::Scalar(col._b, col._g, col._r), -1);
 	}
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawPolyOnCVImage(cv::Mat img,
+						   std::vector<T> shape_contours,
+						   MyColor color,
+						   bool isClosed,
+						   float thickness = 1.0f,
+						   float scale = 1.0f,
+						   float xOffset = 0,
+						   float yOffset = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawPoly(std::string imageName,
+				  std::vector<T> shape_contours, 
+				  MyColor color,
+				  bool isClosed, 
+				  float thickness = 1.0f,
+				  float scale     = 1.0f,
+				  float xOffset   = 0, 
+				  float yOffset   = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawPolys(std::string imageName,
+				  std::vector<std::vector<T>> shape_contours, 
+				  MyColor color,
+				  bool isClosed, 
+				  float thickness = 1.0f,
+				  float scale     = 1.0f,
+				  float xOffset   = 0, 
+				  float yOffset   = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawFilledPoly(std::string imageName,
+						std::vector<T> shape_contours, 
+						MyColor color,
+						float scale = 1.0f,
+						float xOffset = 0, 
+						float yOffset = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawFilledPolyInt(CVImg& img,
+		                   std::vector<T> shape_contours,
+		                   int val,
+		                   float scale = 1.0f,
+		                   float xOffset = 0,
+		                   float yOffset = 0);
 };
 
 #endif

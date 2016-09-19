@@ -4,13 +4,31 @@
 #include "stdafx.h"
 #include "OpenCVWrapper.h"
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	// ---------- wrapper ----------
+	// ---------- image thinning ----------
 	OpenCVWrapper cvWrapper;
+	CVImg bwImg;
+	bwImg._name = "BW";
+	bwImg.CreateGrayscaleImage(500, 500);
+	bwImg.LoadGrayscale("C:/Users/azer/workspace/OpenCVTest/OpenCVTest/star.png");
+	bwImg.Show();
+	
+	CVImg thinningImg = bwImg.Thinning();
+	thinningImg._name = "Thinning";
+	thinningImg.Show();	
+	
+	cvWrapper.WaitKey();
+
+
+
+
+	// ---------- wrapper ----------
+	/*OpenCVWrapper cvWrapper;
 
 	cvWrapper.CreateImage("hello_world", 500, 500, BGR_255);
 
@@ -47,7 +65,16 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	cvWrapper.ShowImage("hello_world");
 
-	cvWrapper.WaitKey();
+	cvWrapper.WaitKey();*/
+
+	/*std::vector<float> v{ 3, 1, -2, 1, -5.5, 9 };
+
+	std::vector<float>::iterator result = std::min_element(std::begin(v), std::end(v));
+	int idx = std::distance(std::begin(v), result);
+	std::cout << "min element at: " << idx << "\n";
+	std::cout << "the value is " << v[idx] << "\n";*/
+
+	std::getchar();
 
 	return 0;
 }
