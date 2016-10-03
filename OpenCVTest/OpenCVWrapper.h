@@ -168,7 +168,9 @@ public:
 	{
 		CVImg thinningImg;
 		thinningImg.CreateGrayscaleImage(this->GetCols(), this->GetRows());
-		ImageThinning::ZhanSuenThinning(this->_img, thinningImg._img);
+		cv::Mat cloneImg = this->_img.clone();
+		cloneImg.convertTo(cloneImg, CV_8UC1); // you have to convert to CV_8UC1
+		ImageThinning::ZhanSuenThinning(cloneImg, thinningImg._img);
 		return thinningImg;
 	}
 };
@@ -327,6 +329,17 @@ public:
 		                   float scale = 1.0f,
 		                   float xOffset = 0,
 		                   float yOffset = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawPolyInt(CVImg& img,
+				     std::vector<T> shape_contours, 
+				     MyColor color,
+				     bool isClosed, 
+				     float thickness = 1.0f,
+				     float scale     = 1.0f,
+				     float xOffset   = 0, 
+				     float yOffset   = 0);
 };
 
 #endif

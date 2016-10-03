@@ -1,17 +1,18 @@
-﻿Build started 9/19/2016 1:27:23 PM.
+﻿Build started 10/3/2016 5:09:40 PM.
      1>Project "C:\Users\azer\workspace\OpenCVTest\OpenCVTest\OpenCVTest.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\azer\workspace\opencv\build\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt OpenCVWrapper.cpp main.cpp
          main.cpp
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(149): warning C4244: '=' : conversion from 'double' to 'uchar', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(153): warning C4244: '=' : conversion from 'double' to 'uchar', possible loss of data
-     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(277): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-         Generating Code...
-         Compiling...
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(279): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\azer\workspace\opencvtest\opencvtest\main.cpp(42): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\azer\workspace\opencvtest\opencvtest\main.cpp(66): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\azer\workspace\opencvtest\opencvtest\main.cpp(68): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
          OpenCVWrapper.cpp
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(149): warning C4244: '=' : conversion from 'double' to 'uchar', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(153): warning C4244: '=' : conversion from 'double' to 'uchar', possible loss of data
-     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(277): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.h(279): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(88): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(159): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(245): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
@@ -24,8 +25,8 @@
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(296): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(296): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(305): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(569): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(549): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(600): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(580): warning C4018: '<' : signed/unsigned mismatch
                  c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(75) : see reference to function template instantiation 'int OpenCVWrapper::GetLongestContourIndex<cv::Point>(std::vector<std::vector<cv::Point,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>)' being compiled
                  with
                  [
@@ -65,8 +66,15 @@
                  [
                      _Ty=AVector
                  ]
-     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(533): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-                 c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(537) : see reference to function template instantiation 'void OpenCVWrapper::DrawLine<AVector>(std::string,AVector,AVector,MyColor,int,float)' being compiled
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(543): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+                 c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(556) : see reference to function template instantiation 'void OpenCVWrapper::DrawPolyInt<AVector>(CVImg &,std::vector<AVector,std::allocator<_Ty>>,MyColor,bool,float,float,float,float)' being compiled
+                 with
+                 [
+                     _Ty=AVector
+                 ]
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(545): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(564): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+                 c:\users\azer\workspace\opencvtest\opencvtest\opencvwrapper.cpp(568) : see reference to function template instantiation 'void OpenCVWrapper::DrawLine<AVector>(std::string,AVector,AVector,MyColor,int,float)' being compiled
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\azer\workspace\OpenCVTest\Debug\OpenCVTest.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\azer\workspace\opencv\build\x86\vc12\lib opencv_core2412d.lib opencv_highgui2412d.lib opencv_imgproc2412d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\azer\workspace\OpenCVTest\Debug\OpenCVTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\azer\workspace\OpenCVTest\Debug\OpenCVTest.lib" /MACHINE:X86 Debug\ImageThinning.obj
@@ -79,4 +87,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.75
+Time Elapsed 00:00:01.68

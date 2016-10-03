@@ -527,6 +527,37 @@ void OpenCVWrapper::DrawFilledPolyInt(CVImg& img,
 /*================================================================================
 ================================================================================*/
 template <typename T>
+void OpenCVWrapper::DrawPolyInt(CVImg& img,
+	                            std::vector<T> shape_contours,
+	                            MyColor color,
+	                            bool isClosed,
+	                            float thickness,
+	                            float scale,
+	                            float xOffset,
+	                            float yOffset)
+{
+	std::vector<cv::Point2f> new_contours;
+	for (size_t b = 0; b < shape_contours.size(); b++)
+		{ new_contours.push_back(cv::Point2f((shape_contours[b].x * scale + xOffset), (shape_contours[b].y * scale + yOffset))); }
+	for (size_t b = 0; b < new_contours.size() - 1; b++)
+		{ cv::line(img._img, new_contours[b], new_contours[b + 1], cv::Scalar(color._b, color._g, color._r) , thickness); }
+	if (isClosed)
+		{ cv::line(img._img, new_contours[new_contours.size() - 1], new_contours[0], cv::Scalar(color._b, color._g, color._r), thickness); }
+}
+
+template
+void OpenCVWrapper::DrawPolyInt(CVImg& img,
+	                            std::vector<AVector> shape_contours,
+	                            MyColor color,
+	                            bool isClosed,
+	                            float thickness,
+	                            float scale,
+	                            float xOffset,
+	                            float yOffse);
+
+/*================================================================================
+================================================================================*/
+template <typename T>
 void OpenCVWrapper::DrawLine(std::string imageName, T pt1, T pt2, MyColor color, int thickness, float scale)
 {
 	cv::Mat drawing = _images[imageName];

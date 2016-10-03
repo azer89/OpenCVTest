@@ -11,7 +11,7 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 	// ---------- image thinning ----------
-	OpenCVWrapper cvWrapper;
+	/*OpenCVWrapper cvWrapper;
 	CVImg bwImg;
 	bwImg._name = "BW";
 	bwImg.CreateGrayscaleImage(500, 500);
@@ -21,14 +21,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	CVImg thinningImg = bwImg.Thinning();
 	thinningImg._name = "Thinning";
 	thinningImg.Show();	
+
+	//for (int x = 0; x < 500; x++)
+	//{
+	//	for (int y = 0; y < 500; y++)
+	//	{
+	//		std::cout << thinningImg.GetGrayValue(x, y) << "\n";
+	//	}
+	//}
 	
-	cvWrapper.WaitKey();
-
-
-
-
+	cvWrapper.WaitKey();*/
+	
 	// ---------- wrapper ----------
-	/*OpenCVWrapper cvWrapper;
+	OpenCVWrapper cvWrapper;
 
 	cvWrapper.CreateImage("hello_world", 500, 500, BGR_255);
 
@@ -50,7 +55,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	// ---------- demonstrating polygon filling with an integer image ----------	
 	CVImg bwImg;
 	bwImg.CreateIntegerImage(500);
-	cvWrapper.DrawFilledPolyInt(bwImg, polyline, 1);
+	//cvWrapper.DrawFilledPolyInt(bwImg, polyline, 1);
+	cvWrapper.DrawPolyInt(bwImg, polyline, 1, true, 3);
 
 	for (int x = 0; x < 500; x++)
 	{
@@ -65,7 +71,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	cvWrapper.ShowImage("hello_world");
 
-	cvWrapper.WaitKey();*/
+	cvWrapper.WaitKey();
 
 	/*std::vector<float> v{ 3, 1, -2, 1, -5.5, 9 };
 
