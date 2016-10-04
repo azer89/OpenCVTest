@@ -334,7 +334,7 @@ public:
 	template <typename T>
 	void DrawPolyInt(CVImg& img,
 				     std::vector<T> shape_contours, 
-				     MyColor color,
+					 int val,
 				     bool isClosed, 
 				     float thickness = 1.0f,
 				     float scale     = 1.0f,
