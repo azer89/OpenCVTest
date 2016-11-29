@@ -558,6 +558,17 @@ void OpenCVWrapper::DrawPolyInt(CVImg& img,
 /*================================================================================
 ================================================================================*/
 template <typename T>
+void OpenCVWrapper::DrawLineInt(CVImg& img, T pt1, T pt2, int val, int thickness, float scale)
+{
+	cv::line(img._img, cv::Point(pt1.x, pt1.y) * scale, cv::Point(pt2.x, pt2.y) * scale, val, thickness);
+}
+
+template
+void OpenCVWrapper::DrawLineInt(CVImg& img, AVector pt1, AVector pt2, int val, int thickness, float scale);
+
+/*================================================================================
+================================================================================*/
+template <typename T>
 void OpenCVWrapper::DrawLine(std::string imageName, T pt1, T pt2, MyColor color, int thickness, float scale)
 {
 	cv::Mat drawing = _images[imageName];

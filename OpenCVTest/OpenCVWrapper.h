@@ -340,6 +340,10 @@ public:
 				     float scale     = 1.0f,
 				     float xOffset   = 0, 
 				     float yOffset   = 0);
+
+	// ---------- draw ----------
+	template <typename T>
+	void DrawLineInt(CVImg& img, T pt1, T pt2, int val, int thickness, float scale = 1.0f);
 };
 
 #endif

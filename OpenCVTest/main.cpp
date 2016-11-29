@@ -4,12 +4,20 @@
 #include "stdafx.h"
 #include "OpenCVWrapper.h"
 
-#include <algorithm>
-#include <iostream>
-#include <vector>
+#include "CVDijkstra.h"
+
+
+//#include "Timer.h"
+
+
+
+
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	CVDijkstra::DijkstraTest();
+
 	// ---------- image thinning ----------
 	/*OpenCVWrapper cvWrapper;
 	CVImg bwImg;
@@ -33,7 +41,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cvWrapper.WaitKey();*/
 	
 	// ---------- wrapper ----------
-	OpenCVWrapper cvWrapper;
+	/*OpenCVWrapper cvWrapper;
 
 	cvWrapper.CreateImage("hello_world", 500, 500, BGR_255);
 
@@ -56,7 +64,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	CVImg bwImg;
 	bwImg.CreateIntegerImage(500);
 	//cvWrapper.DrawFilledPolyInt(bwImg, polyline, 1);
-	cvWrapper.DrawPolyInt(bwImg, polyline, 1, true, 3);
+	//cvWrapper.DrawPolyInt(bwImg, polyline, 1, true, 3);
+	int sz = polyline.size();
+	for (int a = 0; a < sz - 1; a++)
+		{ cvWrapper.DrawLineInt(bwImg, polyline[a], polyline[a + 1], 1, 3); }
+	cvWrapper.DrawLineInt(bwImg, polyline[0], polyline[sz - 1], 1, 3);
 
 	for (int x = 0; x < 500; x++)
 	{
@@ -71,7 +83,12 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	cvWrapper.ShowImage("hello_world");
 
-	cvWrapper.WaitKey();
+	cvWrapper.WaitKey();*/
+
+	/*std::vector<float> v{ 3, -100, -2, 1, -5.5, 9 };
+
+	float smallestVal = *std::min_element(std::begin(v), std::end(v));
+	std::cout << "the value is " << smallestVal << "\n";
 
 	/*std::vector<float> v{ 3, 1, -2, 1, -5.5, 9 };
 
@@ -80,7 +97,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << "min element at: " << idx << "\n";
 	std::cout << "the value is " << v[idx] << "\n";*/
 
-	std::getchar();
+	/*std::list<int> wowow;
+	wowow.push_back(1);
+	wowow.push_back(2);
+	wowow.push_back(3);
+
+	std::cout << *wowow.end() << "\n";
+
+	std::getchar();*/
 
 	return 0;
 }
